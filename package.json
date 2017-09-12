@@ -1,0 +1,20 @@
+{
+  "name": "atm-ui",
+  "version": "1.0.0",
+  "description": "ATM User Interface",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "http-server": "http-server -p 9001"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djoca/atm-ui.git"
+  },
+  "author": "Jose Antonio Rosa dos Santos Junior",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/djoca/atm-ui/issues"
+  },
+  "homepage": "https://github.com/djoca/atm-ui#readme"
+}

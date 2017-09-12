@@ -15,3 +15,9 @@ Then, run the server:
 Open your browser to the following address:
 
     http://localhost:9001
+
+## ATM API
+
+    To use the ATM app, you need to run the ![ATM API](https://github.com/djoca/atm-api) server also. 
+
+    Make sure you install it properly before using the ATM app.

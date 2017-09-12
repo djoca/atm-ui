@@ -41,11 +41,23 @@ atmApp.controller("atmController", ["$scope", "$http", "$location", function($sc
             bill.quantity--;
         }
     }
+
     /*
      * Make a deposit
      */
     $scope.deposit = function(form) {
-        console.log("deposit %s", JSON.stringify(form));
+
+        if (!form || !form.accountNumber) {
+            showGeneralErrorMessage("Account number must be informed.");
+            return;
+        }
+
+        if ($scope.amountBills.filter(function(value) {
+          return value.quantity > 0;
+        }).length == 0) {
+            showGeneralErrorMessage("Please, select the bills to deposit");
+            return;
+        }
 
         var data = $scope.amountBills;
 
@@ -54,9 +66,12 @@ atmApp.controller("atmController", ["$scope", "$http", "$location", function($sc
         });
     }
 
+    /*
+     * Show modal with deposit information
+     */
     showDepositModal = function(data) {
         $("#deposit-modal").modal("show");
-        console.log(data);
+
         $scope.depositModalMessage = data;
     }
 
@@ -64,7 +79,16 @@ atmApp.controller("atmController", ["$scope", "$http", "$location", function($sc
      * Make a withdraw
      */
     $scope.withdraw = function(form) {
-        console.log("withdraw %s", JSON.stringify(form));
+
+        if (!form || !form.accountNumber) {
+            showGeneralErrorMessage("Account number must be informed.");
+            return;
+        }
+
+        if (!form.amount) {
+            showGeneralErrorMessage("Please, inform the amount of money to withdraw.");
+            return;
+        }
 
         var data = {
             amount: form.amount
@@ -87,6 +111,9 @@ atmApp.controller("atmController", ["$scope", "$http", "$location", function($sc
         return $scope.errorMessage;
     }
 
+    /*
+     * Dismiss alert message
+     */
     $scope.dismissAlert = function() {
         $scope.errorMessage = null;
     }
@@ -118,7 +145,7 @@ atmApp.controller("atmController", ["$scope", "$http", "$location", function($sc
                 if (response.data.exception) {
                     showGeneralErrorMessage(response.data.exception);
                 } else {
-                    showGeneralErrorMessage("Problemas ao acessar servidor. Tente mais tarde.");      
+                    showGeneralErrorMessage("Problem reaching server. Try again later.");
                 }
             }
         });

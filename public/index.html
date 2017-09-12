@@ -19,6 +19,13 @@
     </style>
   </head>
   <body ng-controller="atmController">
+    <!-- Alerts -->
+    <div ng-if="hasErrorMessage()" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <button type="button" class="close" aria-label="Close" ng-click="dismissAlert()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{errorMessage}}
+    </div>    
 
     <!-- Menu -->
     <div ng-if="isPageState('menu')" id="menu_page">
@@ -52,8 +59,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <p>Your current balance is </p>
-              <p/>
+              <p>Your current balance is R$ {{depositModalMessage.balance}},00.</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -75,12 +81,14 @@
                   <input type="text" id="accountNumber" name="accountNumber" class="form-control" ng-model="form.accountNumber"></input>
                 </div>
                 <div class="form-group">
-                  <label for="amount">Amount</label>
-                  <div class="input-group">
-                    <span class="input-group-addon">R$</span>
-                    <input type="text" id="amount" name="amount" class="form-control" ng-model="form.amount"></input>
-                    <span class="input-group-addon">,00</span>
-                  </div>
+                  <span ng-repeat="bill in amountBills">
+                    <label class="text-center" for="amount">R$ {{bill.value}}</label>
+                    <div class="input-group">
+                      <span class="input-group-btn"><button class="btn" ng-click="decreaseAmount(bill)">-</button></span>
+                      <input type="text" id="amount" name="amount" class="form-control" ng-model="bill.quantity"></input>
+                      <span class="input-group-btn"><button class="btn" ng-click="increaseAmount(bill)">+</button></span>
+                    </div>
+                  </span>
                 </div>
                 <button class="btn btn-primary" ng-click="deposit(form)">Deposit</button>
                 <button class="btn btn-secondary" ng-click="showMenu()">Cancel</button>
@@ -93,7 +101,7 @@
 
     <!-- Withdraw -->
 
-    <div  ng-if="isPageState('withdraw')" >
+    <div ng-if="isPageState('withdraw')" >
 
       <div id="withdraw-modal" class="modal">
         <div class="modal-dialog" role="document">
@@ -105,11 +113,10 @@
               </button>
             </div>
             <div class="modal-body">
-              <p>Your current balance is </p>
+              <p>Your current balance is R$ {{withdrawalModalMessage.account.balance}},00.</p>
               <p/>
-              <ul>
-                <li>1 x 10</li>
-                <li>1 x 20</li>
+              <ul ng-repeat="bill in withdrawalModalMessage.bills">
+                <li>{{bill.quantity}} x {{bill.value}}</li>
               </ul>
             </div>
             <div class="modal-footer">
